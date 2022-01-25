@@ -24,6 +24,29 @@
     }
   },
   {
+    "type": "directive_group",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "directive",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "expression",
     "named": true,
     "fields": {}
@@ -42,6 +65,10 @@
         },
         {
           "type": "directive",
+          "named": true
+        },
+        {
+          "type": "directive_group",
           "named": true
         },
         {

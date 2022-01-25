@@ -37,11 +37,12 @@ Hello, tree-sitter!
 --------------------------------------------------------------------------------
 
 (fragment
-  (directive
-    (partial_expression))
-  (text)
-  (directive
-    (partial_expression))
+  (directive_group
+    (directive
+      (partial_expression))
+    (text)
+    (directive
+      (partial_expression)))
   (text))
 
 ================================================================================
@@ -57,19 +58,20 @@ Directive with multiple case stanzas
 --------------------------------------------------------------------------------
 
 (fragment
-  (directive
-    (partial_expression))
-  (directive
-    (partial_expression))
-  (text)
-  (directive
-    (partial_expression))
-  (text)
-  (directive
-    (partial_expression))
-  (text)
-  (directive
-    (partial_expression))
+  (directive_group
+    (directive
+      (partial_expression))
+    (directive
+      (partial_expression))
+    (text)
+    (directive
+      (partial_expression))
+    (text)
+    (directive
+      (partial_expression))
+    (text)
+    (directive
+      (partial_expression)))
   (text))
 
 ================================================================================
@@ -83,12 +85,13 @@ Directive with parenthesized anonymous function
 --------------------------------------------------------------------------------
 
 (fragment
-  (directive
-    (partial_expression))
-  (directive
-    (expression))
-  (directive
-    (partial_expression))
+  (directive_group
+    (directive
+      (partial_expression))
+    (directive
+      (expression))
+    (directive
+      (partial_expression)))
   (text))
 
 ================================================================================
@@ -102,12 +105,13 @@ Directive with unparenthesized anonymous function
 --------------------------------------------------------------------------------
 
 (fragment
-  (directive
-    (partial_expression))
-  (directive
-    (expression))
-  (directive
-    (partial_expression))
+  (directive_group
+    (directive
+      (partial_expression))
+    (directive
+      (expression))
+    (directive
+      (partial_expression)))
   (text))
 
 ================================================================================
@@ -134,9 +138,10 @@ Directive with partial expression and trailing comment
 --------------------------------------------------------------------------------
 
 (fragment
-  (directive
-    (partial_expression))
-  (text)
-  (directive
-    (partial_expression))
+  (directive_group
+    (directive
+      (partial_expression))
+    (text)
+    (directive
+      (partial_expression)))
   (text))

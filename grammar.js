@@ -1,55 +1,51 @@
 module.exports = grammar({
-  name: 'eex',
+  name: "eex",
 
   rules: {
-    fragment: $ => repeat($._node),
+    fragment: ($) => repeat($._node),
 
-    _node: $ => choice(
-      $.text,
-      $.comment,
-      $.directive
-    ),
+    _node: ($) => choice($.directive_group, $.text, $.comment, $.directive),
 
-    directive: $ => seq(
-      choice('<%', '<%=', '<%%', '<%%='),
-      prec.left(
-        seq(
-          optional(choice($.partial_expression, $.expression)),
-          '%>',
-        )
-      )
-    ),
+    directive_group: ($) =>
+      seq(
+        alias($._start_or_middle_directive, $.directive),
+        repeat(
+          choice(
+            $.text,
+            $.comment,
+            $.directive,
+            alias($._start_or_middle_directive, $.directive)
+          )
+        ),
+        alias($._end_directive, $.directive)
+      ),
 
-    partial_expression: $ => choice(
-      seq(/end[\)\]\}]*/, repeat($._code)),
-      seq(repeat($._code), choice('do', '->'), optional(seq('#', repeat($._code)))),
-    ),
+    directive: ($) => directive(optional($.expression)),
+    _start_or_middle_directive: ($) => directive(alias($._start_or_middle_expression, $.partial_expression)),
+    _end_directive: ($) => directive(alias($._end_expression, $.partial_expression)),
 
-    expression: $ => repeat1($._code),
+    _start_or_middle_expression: ($) =>
+      seq(repeat($._code), choice("do", "->"), optional($._code_comment)),
 
-    comment: $ => choice($._hash_comment, $._bang_comment),
+    _end_expression: ($) => seq(/end[\)\]\}]*/, optional($._code_comment)),
 
-    _hash_comment: $ => seq(
-      '<%#',
-      prec.left(
-        seq(
-          repeat($._code),
-          '%>'
-        )
-      )
-    ),
+    expression: ($) => repeat1($._code),
 
-    _bang_comment: $ => seq(
-      '<%!--',
-      prec.left(
-        seq(
-          repeat(/[^-]+|-/),
-          '--%>'
-        )
-      )
-    ),
+    comment: ($) => choice($._hash_comment, $._bang_comment),
 
-    text: $ => /[^<]+|</,
+    _hash_comment: ($) => seq("<%#", prec.left(seq(repeat($._code), "%>"))),
 
-    _code: $ => /[^%\s]+|[%\s]/,
-}})
+    _bang_comment: ($) =>
+      seq("<%!--", prec.left(seq(repeat(/[^-]+|-/), "--%>"))),
+
+    text: ($) => /[^<]+|</,
+
+    _code: ($) => /[^%\s]+|[%\s]/,
+
+    _code_comment: ($) => seq("#", repeat($._code)),
+  },
+});
+
+function directive(body) {
+  return seq(choice("<%", "<%=", "<%%", "<%%="), prec.left(seq(body, "%>")));
+}
